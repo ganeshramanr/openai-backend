@@ -1,0 +1,6 @@
+.env
+node_modules/
+app.js
+app.js.map
+routes/*.js
+routes/*.js.map
