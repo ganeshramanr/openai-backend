@@ -46,14 +46,14 @@ const PORT = process.env.PORT || 80;
 
 const app = express();
 app.use(express.json());
-app.use('/api/user', verifyJWT, userRoutes);
-app.use('/api/openai', verifyJWT, openAIRoutes);
-
 const options = {
   // origin: `${UI_URL}:${UI_PORT}`,
   origin: "*"
   }
-app.use(cors(options))
+app.use(cors(options));
+
+app.use('/api/user', verifyJWT, userRoutes);
+app.use('/api/openai', verifyJWT, openAIRoutes);
 
 app.get('/api', (req, res) => {
   res.send('Api server is running');
