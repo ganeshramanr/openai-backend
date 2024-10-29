@@ -4,6 +4,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import pg from "pg";
 import bcrypt from "bcrypt";
+import axios from 'axios';
 import userRoutes from './routes/user';
 import openAIRoutes from './routes/openai';
 
@@ -40,6 +41,7 @@ const verifyJWT = (req, res, next) => {
   }
 }
 
+const GOOGLE_API = process.env.GOOGLE_API || "https://www.googleapis.com/oauth2/v1/userinfo";
 const PORT = process.env.PORT || 80;
 // const UI_URL = process.env.UI_URL || "http://localhost";
 // const UI_PORT = process.env.UI_PORT || 5173;
@@ -136,6 +138,38 @@ app.post("/api/login", async (req, res) => {
       res.status(401).json({ error: "Invalid username or password"});
     }
     
+  } catch (error: any) {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error"});
+  }
+});
+
+app.post("/api/login/google", async (req, res) => {
+  const { accessToken } = req.body;
+  try {
+    if (!accessToken) {
+      res.status(400).json({ error: "Missing required parameter: accessToken" });
+      return;
+    }
+
+    axios.get(`${GOOGLE_API}?access_token=${accessToken}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: 'application/json'
+        }
+    }).then((result) => {
+      const email = result.data.email;
+      // create jwt token
+      const payload = {
+        email: email
+      }
+      const options = {expiresIn: '10h'};
+      const token = jwt.sign(payload, SECRET, options);
+      res.status(200).json({ success: true, token: token, user: email});
+    }).catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Authentication failed"});
+    });  
   } catch (error: any) {
       console.log(error);
       res.status(500).json({ error: "Internal server error"});
