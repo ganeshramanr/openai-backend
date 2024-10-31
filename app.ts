@@ -100,6 +100,13 @@ app.post("/api/register", async (req, res) => {
 });
 
 app.post("/api/login", async (req, res) => {
+  // console.log(req.headers);
+  // const ipAddress = req.headers['x-forwarded-for'] || 
+  //                 req.headers['x-real-ip'] ||
+  //                 req.connection.remoteAddress;
+  
+  // console.log(ipAddress);
+
   const { email, password } = req.body;
   try {
     if (!email) {
@@ -110,6 +117,11 @@ app.post("/api/login", async (req, res) => {
       res.status(400).json({ error: "Missing required parameter: password" });
       return;
     }
+
+    // to track login records
+    await db.query(`INSERT INTO login_records (email) VALUES ($1)`,
+      [email]
+    );
     
     const result = await db.query(
       `
@@ -118,6 +130,11 @@ app.post("/api/login", async (req, res) => {
       [email]
     );
     if(result.rows.length > 0) {
+      const app_signin = result.rows[0].app_signin;
+      if(app_signin === 'Google') {
+        res.status(401).json({ error: `${email} signed up using google, Please use Google Sign-in`});
+        return;
+      }
       const dbPasswordHash = result.rows[0].password_hash;
       await bcrypt.compare(password, dbPasswordHash, (err, result) => {
         if (result) {
@@ -157,8 +174,25 @@ app.post("/api/login/google", async (req, res) => {
             Authorization: `Bearer ${accessToken}`,
             Accept: 'application/json'
         }
-    }).then((result) => {
+    }).then(async (result) => {
       const email = result.data.email;
+      const record = await db.query(
+        `SELECT * from users WHERE email = ($1)`,
+        [email]
+      );
+      // If no record exist for this email, insert to DB
+      if(record.rows.length == 0) {
+        const firstname = result.data.given_name || "NA";
+        const lastname = result.data.family_name || "NA";
+        await db.query(
+          `
+        INSERT INTO users (email, firstname, lastname, password_hash, app_signin)
+          VALUES ($1, $2, $3, $4, $5)
+        `,
+          [email, firstname, lastname, "", "Google"]
+        );
+      }
+
       // create jwt token
       const payload = {
         email: email
