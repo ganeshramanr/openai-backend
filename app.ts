@@ -132,7 +132,7 @@ app.post("/api/login", async (req, res) => {
     if(result.rows.length > 0) {
       const app_signin = result.rows[0].app_signin;
       if(app_signin === 'Google') {
-        res.status(401).json({ error: `${email} signed up using google, Please use Google Sign-in`});
+        res.status(401).json({ error: `User ${email} signed up using google. Please use Google Sign-in`});
         return;
       }
       const dbPasswordHash = result.rows[0].password_hash;
