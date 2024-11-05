@@ -4,7 +4,7 @@ import pg from "pg";
 
 dotenv.config();
 const db = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.AUTH_DB_URL,
   ssl: false
 });
 

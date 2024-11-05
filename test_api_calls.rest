@@ -1,0 +1,34 @@
+
+POST http://localhost:80/api/login
+Content-Type: application/json
+
+{
+    "email": "ganeshraman.r@gmail.com",
+    "password": "easy"
+}
+
+###
+POST http://localhost:80/api/register
+Content-Type: application/json
+
+{
+    "email": "ganesh16@gmail.com",
+    "password": "easy",
+    "firstname": "A1",
+    "lastname": "B1"
+}
+
+###
+GET http://localhost:80/api/user/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVzaHJhbWFuLnJAZ21haWwuY29tIiwiaWF0IjoxNzMwODQ4NDgxLCJleHAiOjE3MzA4ODQ0ODF9.7LJM7aYUbiFzb15Wl7T-h3pETImzDSGRHnrio4CwhHA
+
+###
+PUT http://localhost:80/api/user/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVzaHJhbWFuLnJAZ21haWwuY29tIiwiaWF0IjoxNzI5OTI5NDIyLCJleHAiOjE3Mjk5NjU0MjJ9.t3q1uz12ED7NKp_DRAyN_84DC1lbfOPQjLlr36lECWY
+Content-Type: application/json
+
+{
+    "firstname": "GaneshMod",
+    "lastname": "RamanMod"
+}
+

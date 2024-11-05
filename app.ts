@@ -9,14 +9,15 @@ import userRoutes from './routes/user';
 import openAIRoutes from './routes/openai';
 
 dotenv.config();
-if (!process.env.DATABASE_URL) {
-  throw new Error("Required environment variable is missing: DATABASE_URL");
+if (!process.env.AUTH_DB_URL) {
+  throw new Error("Required environment variable is missing: AUTH_DB_URL");
 }
 
-const SECRET = process.env.SECRET || "secret string";
+const JWT_SECRET = process.env.JWT_SECRET || "secret string";
+const JWT_EXPIRY = process.env.JWT_EXPIRY || '5m';
 
 const db = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.AUTH_DB_URL,
   ssl: false
 });
 
@@ -33,7 +34,7 @@ interface UserRequest extends Request {
 const verifyJWT = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1] || "";
-    const decoded = jwt.verify(token, SECRET) as UserRequest;
+    const decoded = jwt.verify(token, JWT_SECRET) as UserRequest;
     req.user = decoded.email;
     next();
   } catch(error) {
@@ -42,7 +43,7 @@ const verifyJWT = (req, res, next) => {
 }
 
 const GOOGLE_API = process.env.GOOGLE_API || "https://www.googleapis.com/oauth2/v1/userinfo";
-const PORT = process.env.PORT || 80;
+const SERVER_PORT = process.env.SERVER_PORT || 80;
 // const UI_URL = process.env.UI_URL || "http://localhost";
 // const UI_PORT = process.env.UI_PORT || 5173;
 
@@ -143,8 +144,8 @@ app.post("/api/login", async (req, res) => {
             const payload = {
               email: email
             }
-            const options = {expiresIn: '10h'};
-            const token = jwt.sign(payload, SECRET, options);
+            const options = {expiresIn: JWT_EXPIRY};
+            const token = jwt.sign(payload, JWT_SECRET, options);
             res.status(200).json({ success: true, token: token });
             return;
         } else {
@@ -198,7 +199,7 @@ app.post("/api/login/google", async (req, res) => {
         email: email
       }
       const options = {expiresIn: '10h'};
-      const token = jwt.sign(payload, SECRET, options);
+      const token = jwt.sign(payload, JWT_SECRET, options);
       res.status(200).json({ success: true, token: token, user: email});
     }).catch((err) => {
       console.log(err);
@@ -210,6 +211,6 @@ app.post("/api/login/google", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  return console.log(`Express is listening at ${PORT}`);
+app.listen(SERVER_PORT, () => {
+  return console.log(`Express is listening at ${SERVER_PORT}`);
 });
