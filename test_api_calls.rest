@@ -24,7 +24,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVza
 
 ###
 PUT http://localhost:80/api/user/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVzaHJhbWFuLnJAZ21haWwuY29tIiwiaWF0IjoxNzI5OTI5NDIyLCJleHAiOjE3Mjk5NjU0MjJ9.t3q1uz12ED7NKp_DRAyN_84DC1lbfOPQjLlr36lECWY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVzaHJhbWFuLnJAZ21haWwuY29tIiwiaWF0IjoxNzMwODQ4NDgxLCJleHAiOjE3MzA4ODQ0ODF9.7LJM7aYUbiFzb15Wl7T-h3pETImzDSGRHnrio4CwhHA
 Content-Type: application/json
 
 {
