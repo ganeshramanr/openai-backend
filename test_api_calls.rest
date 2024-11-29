@@ -1,5 +1,8 @@
 
-POST http://localhost:80/api/login
+@baseUrl = http://localhost:80/api
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVzaHJhbWFuLnJAZ21haWwuY29tIiwiaWF0IjoxNzMxNDgxMzgxLCJleHAiOjE3MzE1MTczODF9.Xw5L7kSgQTzeL0Fi8Xc8D1BorCDi1Sefgd3kZWWPEK0
+
+POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
@@ -8,7 +11,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:80/api/register
+POST {{baseUrl}}/register
 Content-Type: application/json
 
 {
@@ -19,12 +22,12 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:80/api/user/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVzaHJhbWFuLnJAZ21haWwuY29tIiwiaWF0IjoxNzMwODQ4NDgxLCJleHAiOjE3MzA4ODQ0ODF9.7LJM7aYUbiFzb15Wl7T-h3pETImzDSGRHnrio4CwhHA
+GET {{baseUrl}}/user/me
+Authorization: Bearer {{token}}
 
 ###
-PUT http://localhost:80/api/user/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhbmVzaHJhbWFuLnJAZ21haWwuY29tIiwiaWF0IjoxNzMwODQ4NDgxLCJleHAiOjE3MzA4ODQ0ODF9.7LJM7aYUbiFzb15Wl7T-h3pETImzDSGRHnrio4CwhHA
+PUT {{baseUrl}}/user/me
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -32,3 +35,19 @@ Content-Type: application/json
     "lastname": "RamanMod"
 }
 
+###
+GET http://localhost:80/api/openai/models
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:80/api/openai/prompt
+Authorization: Bearer {{token}}
+
+###
+GET https://api.openai.com/v1/models
+Authorization: Bearer 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
+'OpenAI-Organization': 'org-3v5B7uvTJcqvUAjzk3X72t0K'
+'OpenAI-Project': 'proj_tzaXe5MRpS1c4DYyXNbfQCrq'
+
+###
+GET https://my-json-server.typicode.com/typicode/demo/posts
