@@ -36,11 +36,15 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:80/api/deepseek/generate
+Authorization: Bearer {{token}}
+
+###
 GET http://localhost:80/api/openai/models
 Authorization: Bearer {{token}}
 
 ###
-GET http://localhost:80/api/openai/prompt
+GET http://localhost:80/api/openai/generate
 Authorization: Bearer {{token}}
 
 ###

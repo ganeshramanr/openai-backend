@@ -11,10 +11,10 @@ const OPENAI_ORGANIZATION = process.env.OPENAI_ORGANIZATION;
 const OPENAI_PROJECT = process.env.OPENAI_PROJECT;
 
 // Initialize the OpenAI client
-// const client = new OpenAI({
-//   apiKey: OPENAI_API_KEY, // This is the default and can be omitted
-// });
-const client = new OpenAI();
+const client = new OpenAI({
+  baseURL: OPENAI_URL,
+  apiKey: OPENAI_API_KEY
+});
 
 const router = express.Router();
 
@@ -31,7 +31,7 @@ router.get('/models', (req, res) => {
       }).catch((err) => console.log(err));
 });
 
-router.get('/prompt', async (req, res) => {
+router.get('/generate', async (req, res) => {
   try {
     // Define the parameters for the chat completion
     // const params: OpenAI.Chat.ChatCompletionCreateParams = {
@@ -50,7 +50,7 @@ router.get('/prompt', async (req, res) => {
         messages: [
             {"role": "user", "content": "write a haiku about ai"}
         ],
-        max_tokens: 150
+        // max_tokens: 150
     });
     console.log(completion.choices[0].message);
     res.json({ data: completion.choices[0].message });

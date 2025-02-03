@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import axios from 'axios';
 import userRoutes from './routes/user';
 import openAIRoutes from './routes/openai';
+import deepseekRoutes from './routes/deepseek';
 
 dotenv.config();
 if (!process.env.AUTH_DB_URL) {
@@ -57,6 +58,7 @@ app.use(cors(options));
 
 app.use('/api/user', verifyJWT, userRoutes);
 app.use('/api/openai', verifyJWT, openAIRoutes);
+app.use('/api/deepseek', verifyJWT, deepseekRoutes);
 
 app.get('/api', (req, res) => {
   res.send('Api server is running');
